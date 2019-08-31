@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {titleText} from './MiscComponentUtilities';
-import {DefaultPageContent} from './DefaultPageContent';
+import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
+import {StingRays} from './StingRays/StringRays';
 
 export class App extends Component {
     constructor(props) {
@@ -11,7 +12,8 @@ export class App extends Component {
     
     render() {
         return (
-            <DefaultPageContent/>
+            <StingRays/> // @todo something with this
+            //<DefaultPageContent/>
         );
     }
 }
