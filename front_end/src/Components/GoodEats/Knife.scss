@@ -1,0 +1,36 @@
+
+$large-number-of-pixels: 500000px;
+
+$knife-handle-length: 50%;
+$knife-color: grey;
+$knife-handle-width: 20%;
+$knife-blade-width: 30%;
+$knife-color: grey;
+
+.knife {
+    position: relative;
+    height: 600px;
+    width: 200px;
+    
+    .knife-blade {
+	position: absolute;
+	height: calc(100% - (#{$knife-handle-length} - 20px));
+	width: $knife-blade-width;
+	left: calc(50% - (#{$knife-blade-width} - #{$knife-handle-width}) / 2.0);
+	transform: translateX(-50%);
+	top: 0%;
+	background: $knife-color;
+	border-radius: 100% 0% 0% 100% / 100% 0% 0% 10%;
+    }
+
+    .knife-handle {
+	position: absolute;
+	height: $knife-handle-length;
+	width: $knife-handle-width;
+	bottom: 0;
+	background: $knife-color;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 0 0 10px 10px;
+    }
+}

@@ -4,10 +4,12 @@ import {titleText} from './MiscComponentUtilities';
 import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
 import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
 import {PastelQuarters} from './PastelQuarters/PastelQuarters';
+import {GoodEats} from './GoodEats/GoodEats';
 
 const locationHashToLoadingScreenComponentMap = {
     'dancing-diamonds': DancingDiamonds,
     'pastel-quarters': PastelQuarters,
+    'good-eats': GoodEats,
 };
 
 export class App extends Component {
