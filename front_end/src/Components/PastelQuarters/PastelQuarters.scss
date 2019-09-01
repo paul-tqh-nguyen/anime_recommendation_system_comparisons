@@ -1,0 +1,38 @@
+$transition-time: 0.5s;
+
+
+#pastel-quarter-upper-left {
+    transition: background $transition-time;
+    position: absolute;
+    top: 0;
+    bottom: 50vh;
+    left: 0;
+    right: 50vw;
+}
+
+#pastel-quarter-upper-right{
+    transition: background $transition-time;
+    position: absolute;
+    top: 0;
+    bottom: 50vh;
+    left: 50vw;
+    right: 0;
+}
+
+#pastel-quarter-lower-left{
+    transition: background $transition-time;
+    position: absolute;
+    top: 50vh;
+    bottom: 0;
+    left: 0;
+    right: 50vw;
+}
+    
+#pastel-quarter-lower-right{
+    transition: background $transition-time;
+    position: absolute;
+    top: 50vh;
+    bottom: 0;
+    left: 50vw;
+    right: 0;
+}

@@ -24,9 +24,16 @@ body {
 	text-align: center;
 
 	z-index: 10;
-	
-	li {
-	    list-style: none;
+
+	ul{
+	    display: flex;
+	    flex-direction: row;
+	    align-items: center;
+	    justify-content: space-evenly;
+	    
+	    li {
+		list-style: none;
+	    }
 	}
 	
 	a {

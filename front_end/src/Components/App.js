@@ -3,9 +3,11 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import {titleText} from './MiscComponentUtilities';
 import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
 import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
+import {PastelQuarters} from './PastelQuarters/PastelQuarters';
 
 const locationHashToLoadingScreenComponentMap = {
     'dancing-diamonds': DancingDiamonds,
+    'pastel-quarters': PastelQuarters,
 };
 
 export class App extends Component {
