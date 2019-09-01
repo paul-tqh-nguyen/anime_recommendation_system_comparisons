@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
-import {titleText, githubRepoLink, githubWikiLink, githubREADMELink} from '../MiscComponentUtilities';
+import {titleText, githubRepoLink, githubWikiLink, githubREADMELink, dwimLoadingScreenLinkToHumanReadableAnchorTitle} from '../MiscComponentUtilities';
 import './DefaultPageContent.scss';
 
 export class DefaultPageContent extends Component {
     render() {
+        let { availableLoadingScreens } = this.props;
+        let renderedLoadingPageLinks = availableLoadingScreens.map((link) =>  {
+            let linkString = `#${link}`;
+            let humanReadableText = dwimLoadingScreenLinkToHumanReadableAnchorTitle(link);
+            return <li><a title={humanReadableText} href={linkString}>{humanReadableText}</a></li>;
+        });
         let renderedContent = 
             <div id="default-page-text">
               {titleText}
@@ -13,7 +19,7 @@ export class DefaultPageContent extends Component {
               <p>
                 The loading screens available for demoing are:
                 <ul>
-                  <li>@todo put something here</li>
+                  {renderedLoadingPageLinks}
                 </ul>
               </p>
             </div>;

@@ -28,5 +28,14 @@ body {
 	li {
 	    list-style: none;
 	}
+	
+	a {
+	    color: white;
+	    transition: color 0.5s;
+	    
+	    &:hover {
+		color: black;
+	    }
+	}
     }
 }

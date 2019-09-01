@@ -3,6 +3,10 @@ import {titleText} from './MiscComponentUtilities';
 import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
 import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
 
+const locationHashToLoadingScreenComponentMap = {
+    'dancing-diamonds': <DancingDiamonds/>,
+};
+
 export class App extends Component {
     componentDidMount() {
         let title = document.getElementsByTagName('title')[0];
@@ -11,15 +15,10 @@ export class App extends Component {
     
     render() {
         let currentHash = window.location.hash.slice(1);
-        let renderedContent = null;
-        console.log(currentHash);
-        switch (currentHash) {
-        case 'dancing-diamonds':
-            renderedContent = <DancingDiamonds/>;
-            break;
-        default:
-            renderedContent = <DefaultPageContent/>;
-        }
+        let availableLoadingScreens = Object.keys(locationHashToLoadingScreenComponentMap);
+        let renderedContent = currentHash in locationHashToLoadingScreenComponentMap ?
+            locationHashToLoadingScreenComponentMap[currentHash] :
+            <DefaultPageContent availableLoadingScreens={availableLoadingScreens}/>;
         return renderedContent;
     }
 }

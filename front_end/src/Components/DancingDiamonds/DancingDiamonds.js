@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import './DancingDiamonds.scss';
 
-const loadingScreenMessage = "Loading...";
 const numberOfMovingBars = 100;
 const movingBarAnimationTimeInSeconds = 10;
 const numberOfVisiblyTouchingMovingBarSets = 2.5;
