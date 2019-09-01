@@ -4,17 +4,23 @@ import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
 import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
 
 export class App extends Component {
-    constructor(props) {
-        super(props);
+    componentDidMount() {
         let title = document.getElementsByTagName('title')[0];
         title.innerText = titleText;
     }
     
     render() {
-        return (
-            <DancingDiamonds/> // @todo something with this
-            //<DefaultPageContent/>
-        );
+        let currentHash = window.location.hash.slice(1);
+        let renderedContent = null;
+        console.log(currentHash);
+        switch (currentHash) {
+        case 'dancing-diamonds':
+            renderedContent = <DancingDiamonds/>;
+            break;
+        default:
+            renderedContent = <DefaultPageContent/>;
+        }
+        return renderedContent;
     }
 }
 
