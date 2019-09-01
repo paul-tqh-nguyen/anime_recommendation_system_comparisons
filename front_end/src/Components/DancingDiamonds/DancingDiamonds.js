@@ -1,12 +1,13 @@
 
 import React, {Component} from 'react';
-import './StringRays.scss';
+import './DancingDiamonds.scss';
 
+const loadingScreenMessage = "Loading...";
 const numberOfMovingBars = 100;
-const movingBarAnimationTimeInSeconds = 5;
+const movingBarAnimationTimeInSeconds = 10;
 const numberOfVisiblyTouchingMovingBarSets = 2.5;
 
-export class StingRays extends Component {
+export class DancingDiamonds extends Component {
     render() {
         let topMovingBars = [];
         let bottomMovingBars = [];
@@ -23,9 +24,12 @@ export class StingRays extends Component {
             bottomMovingBars.push(<div style={movingBarIndexDependentStyle} className="bottom-moving-bar" key={`Loading Bar ${movingBarIndex}`}></div>);
         }
         return (
-            <div id="moving-bars-container">
-              {topMovingBars}
-              {bottomMovingBars}
+            <div>
+              <div id="loading-screen-text">Loading...</div>
+              <div id="moving-bars-container">
+                {topMovingBars}
+                {bottomMovingBars}
+              </div>
             </div>
         );
     }

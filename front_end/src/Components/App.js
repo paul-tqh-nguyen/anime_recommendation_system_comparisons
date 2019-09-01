@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {titleText} from './MiscComponentUtilities';
 import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
-import {StingRays} from './StingRays/StringRays';
+import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
 
 export class App extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ export class App extends Component {
     
     render() {
         return (
-            <StingRays/> // @todo something with this
+            <DancingDiamonds/> // @todo something with this
             //<DefaultPageContent/>
         );
     }
