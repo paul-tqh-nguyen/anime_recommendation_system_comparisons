@@ -2,15 +2,14 @@
 $large-number-of-pixels: 500000px;
 
 $fork-tine-height: 26%;
-$fork-tine-width: 20%;
+$fork-tine-width: 25%;
 $fork-handle-length: 65%;
 $fork-color: grey;
-$fork-tine-base-smoother-border-radius: 20px;
 
 .fork {
     position: relative;
-    height: 600px;
-    width: 200px;
+    height: 60vh;
+    width: 20vh;
     
     .fork-tine-left {
 	left: 0;

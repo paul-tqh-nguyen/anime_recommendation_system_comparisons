@@ -7,8 +7,16 @@ export class GoodEats extends Component {
     render() {
         return (
             <div id="good-eats-container">
-              <Knife />
-              <Fork />
+              <div className='knife-container'>
+                <div className='utensil-initial-rotation'>
+                  <Knife/>
+                </div>
+              </div>
+                 <div className='fork-container'>
+                 <div className='utensil-initial-rotation'>
+                 <Fork/>
+                 </div>
+                 </div>
             </div>
         );
     }

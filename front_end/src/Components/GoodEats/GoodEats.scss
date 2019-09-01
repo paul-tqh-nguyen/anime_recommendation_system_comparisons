@@ -10,3 +10,59 @@
 
 #good-eats-container {
 }
+
+.utensil-initial-rotation {
+    animation-duration: 2s;
+    animation-delay: 0s;
+    animation-name: rotating-animation;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+}
+
+@keyframes fork-travelling-path-animation {
+    0% {
+	top: 50vh;
+	left: 120vh;
+    }
+    100% {
+	top: 50vh;
+	left: 20vw;
+    }
+}
+
+@keyframes knife-travelling-path-animation {
+    0% {
+	top: 50vh;
+	left: -20vh;
+    }
+    100% {
+	top: 50vh;
+	left: 80vw;
+    }
+}
+
+.knife-container {
+    position: absolute;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50vh;
+    left: 80vw;
+    
+    animation-duration: 2s;
+    animation-delay: 0s;
+    animation-name: knife-travelling-path-animation;
+    animation-iteration-count: 1;
+    animation-timing-function: linear
+}
+
+.fork-container {
+    position: absolute;
+    transform: translateY(-50%) translateX(-50%);
+    top: 50vh;
+    left: 20vw;
+    
+    animation-duration: 2s;
+    animation-delay: 0s;
+    animation-name: fork-travelling-path-animation;
+    animation-iteration-count: 1;
+    animation-timing-function: linear
+}
