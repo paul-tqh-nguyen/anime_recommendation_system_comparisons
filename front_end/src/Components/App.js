@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
+import {BrowserRouter, Route} from 'react-router-dom';
 import {titleText} from './MiscComponentUtilities';
 import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
 import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
 
 const locationHashToLoadingScreenComponentMap = {
-    'dancing-diamonds': <DancingDiamonds/>,
+    'dancing-diamonds': DancingDiamonds,
 };
 
 export class App extends Component {
@@ -14,12 +15,16 @@ export class App extends Component {
     }
     
     render() {
-        let currentHash = window.location.hash.slice(1);
         let availableLoadingScreens = Object.keys(locationHashToLoadingScreenComponentMap);
-        let renderedContent = currentHash in locationHashToLoadingScreenComponentMap ?
-            locationHashToLoadingScreenComponentMap[currentHash] :
-            <DefaultPageContent availableLoadingScreens={availableLoadingScreens}/>;
-        return renderedContent;
+        return (
+            <BrowserRouter>
+              <Route path='/' render={(props) => <DefaultPageContent availableLoadingScreens={availableLoadingScreens}/>} exact/>
+              {availableLoadingScreens.map((loadingScreenLink) => {
+                  let path = `/${loadingScreenLink}`;
+                  return <Route path={path} component={locationHashToLoadingScreenComponentMap[loadingScreenLink]}/>;
+              })}
+            </BrowserRouter>
+        );
     }
 }
 

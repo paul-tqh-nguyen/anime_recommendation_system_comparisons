@@ -6,9 +6,8 @@ export class DefaultPageContent extends Component {
     render() {
         let { availableLoadingScreens } = this.props;
         let renderedLoadingPageLinks = availableLoadingScreens.map((link) =>  {
-            let linkString = `#${link}`;
             let humanReadableText = dwimLoadingScreenLinkToHumanReadableAnchorTitle(link);
-            return <li><a title={humanReadableText} href={linkString}>{humanReadableText}</a></li>;
+            return <li><a title={humanReadableText} href={link}>{humanReadableText}</a></li>;
         });
         let renderedContent = 
             <div id="default-page-text">
