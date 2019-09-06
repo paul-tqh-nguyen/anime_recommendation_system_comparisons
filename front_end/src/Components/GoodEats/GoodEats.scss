@@ -22,7 +22,7 @@
 @keyframes fork-travelling-path-animation {
     0% {
 	top: 50vh;
-	left: 120vh;
+	left: calc(100vw + 20vh);
     }
     100% {
 	top: 50vh;

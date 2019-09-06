@@ -5,11 +5,13 @@ import {DefaultPageContent} from './DefaultPageContent/DefaultPageContent';
 import {DancingDiamonds} from './DancingDiamonds/DancingDiamonds';
 import {PastelQuarters} from './PastelQuarters/PastelQuarters';
 import {GoodEats} from './GoodEats/GoodEats';
+import {EnteringBars} from './EnteringBars/EnteringBars';
 
 const locationHashToLoadingScreenComponentMap = {
     'dancing-diamonds': DancingDiamonds,
     'pastel-quarters': PastelQuarters,
     'good-eats': GoodEats,
+    'entering-bars': EnteringBars,
 };
 
 export class App extends Component {
@@ -25,7 +27,7 @@ export class App extends Component {
               <Route path='/' render={(props) => <DefaultPageContent availableLoadingScreens={availableLoadingScreens}/>} exact/>
               {availableLoadingScreens.map((loadingScreenLink) => {
                   let path = `/${loadingScreenLink}`;
-                  return <Route path={path} component={locationHashToLoadingScreenComponentMap[loadingScreenLink]}/>;
+                  return <Route path={path} component={locationHashToLoadingScreenComponentMap[loadingScreenLink]} key={loadingScreenLink}/>;
               })}
             </BrowserRouter>
         );

@@ -1,0 +1,18 @@
+
+div#entering-bars-container {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
+    background: black;
+}
+
+.horizontally-moving-bars {
+    position: absolute;
+}
+
+.vertically-moving-bars {
+    position: absolute;    
+}

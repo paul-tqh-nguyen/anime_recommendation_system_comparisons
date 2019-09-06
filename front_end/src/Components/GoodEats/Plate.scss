@@ -1,0 +1,93 @@
+
+$chicken-body-width: 75%;
+$chicken-body-top-height: 40%;
+$chicken-body-bottom-height: 25%;
+$chicken-body-height: $chicken-body-top-height + $chicken-body-bottom-height;
+$chicken-body-color: red;
+$chicken-body-skew: 5deg;
+$chicken-body-vertical-padding-to-account-for-skew: 5%;
+$chicken-body-horizontal-padding-to-account-for-skew: 2%;
+$drumstick-meat-semi-circle-size: 25%;
+$drumstick-meat-triangle-height: 100%;
+
+.chicken {
+    position: relative;
+    height: 30vh;
+    width: 45vh;
+    background: green;
+}
+
+.drumstick {
+    position: absolute;
+    height: 100%;
+    width: $drumstick-meat-semi-circle-size;
+    top: 0%;
+    left: 0%;
+    //transform: translateX(-50%)
+}
+
+.drumstick-meat {
+    //position: absolute;
+    //transform: translate(50%, 50%)
+}
+
+.drumstick-meat-semi-circle {
+    position: absolute;
+    height: $drumstick-meat-semi-circle-size;
+    width: 100%;
+    background: blue;
+    border-radius: 50% 50% 0% 0% / 100% 100% 0% 0%;
+}
+
+.drumstick-meat-triangle-container {    
+   position: absolute;
+   height: inherit;
+   width: 100%;
+   top: $drumstick-meat-semi-circle-size;
+   left: 0%;
+}
+
+.drumstick-meat-triangle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    
+    &:after {
+	content: '';
+	position: absolute;
+	left: 0%; 
+	right: 0%;
+	padding-bottom: $drumstick-meat-triangle-height;
+	background: brown;
+	clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    }
+}
+
+.chicken-body {
+    height: 100%;
+    width: 100%;
+    transform: skew(0deg, $chicken-body-skew);
+}
+
+.chicken-body-top {
+    position: absolute;
+    right: $chicken-body-horizontal-padding-to-account-for-skew;
+    top: calc(100% - #{$chicken-body-height} - #{$chicken-body-vertical-padding-to-account-for-skew});
+    bottom: calc(#{$chicken-body-bottom-height} + #{$chicken-body-vertical-padding-to-account-for-skew});
+    width: $chicken-body-width;
+    background: $chicken-body-color;
+    box-shadow: 1px 1px 0px 1px $chicken-body-color;
+    border-radius: 35% 70% 0% 0% / 100% 100% 0% 0%;
+}
+
+.chicken-body-bottom {
+    position: absolute;
+    right: $chicken-body-horizontal-padding-to-account-for-skew;
+    top: calc(100% - #{$chicken-body-bottom-height} - #{$chicken-body-vertical-padding-to-account-for-skew});
+    bottom: #{$chicken-body-vertical-padding-to-account-for-skew};
+    width: $chicken-body-width;
+    background: $chicken-body-color;
+    box-shadow: 1px 1px 0px 1px $chicken-body-color;
+    border-radius: 10% 10% 50% 50% / 0% 0% 100% 100%;
+}
