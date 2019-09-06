@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {isEven} from '../MiscComponentUtilities';
 import './EnteringBars.scss';
 
-const animationDurationUpperBoundInMilliseconds = 999000;
+const animationDurationUpperBoundInMilliseconds = 5000;
+const animationDelayInMilliseconds = 1000;
 const numberOfBarsOnSmallerDimension = 10;
 const movingBarBaseZIndex = 10;
 const preSelectedHorizontalColors = ['#37474f', '#455a64', '#546e7a', '#607d8b', '#78909c', '#90a4ae', '#b0bec5'];
@@ -27,10 +28,10 @@ export class EnteringBars extends Component {
         let updatedVerticallyMovingBarWidthInPixels = 0;
         let updatedHorizontallyMovingBarWidthInPixels = 0;
         if (heightIsSmallerDimension) {
-            updatedHorizontallyMovingBarWidthInPixels = windowHeight/10.0;
+            updatedHorizontallyMovingBarWidthInPixels = windowHeight/numberOfBarsOnSmallerDimension;
             updatedVerticallyMovingBarWidthInPixels = windowWidth/Math.floor(windowWidth/updatedHorizontallyMovingBarWidthInPixels);
         } else {
-            updatedVerticallyMovingBarWidthInPixels = windowWidth/10.0;
+            updatedVerticallyMovingBarWidthInPixels = windowWidth/numberOfBarsOnSmallerDimension;
             updatedHorizontallyMovingBarWidthInPixels = windowHeight/Math.floor(windowHeight/updatedVerticallyMovingBarWidthInPixels);
         }
         this.setState({
@@ -91,21 +92,23 @@ export class EnteringBars extends Component {
             zIndex: zIndex,
             background: backgroundColorInHex,
             border: `1px solid ${backgroundColorInHex}`,
+            animationDuration: `${animationDurationUpperBoundInMilliseconds}ms`,
+            animationDelay: `${movingBarIndex*animationDelayInMilliseconds}ms`,
         };
         if (isVerticalMovingBar) {
             style.left = `${movingBarIndex*verticallyMovingBarWidthInPixels}px`;
             style.width = `${verticallyMovingBarWidthInPixels}px`;
-            style.height = `100vh`;
+            style.height = `0`;
         } else {
             style.top = `${movingBarIndex*horizontallyMovingBarWidthInPixels}px`;
-            style.width = `100vw`;
+            style.width = `0`;
             style.height = `${horizontallyMovingBarWidthInPixels}px`;
         }
         return style;
     }
     
     render() {
-        let {numberOfVerticallyMovingBars, numberOfHorizontallyMovingBars, verticallyMovingBarWidthInPixels, horizontallyMovingBarWidthInPixels} = this.state;
+        let {numberOfVerticallyMovingBars, numberOfHorizontallyMovingBars} = this.state;
         let verticallyMovingBars = [];
         for(var verticallyMovingBarIndex = 0; verticallyMovingBarIndex<numberOfVerticallyMovingBars; verticallyMovingBarIndex++) {
             let style = this.styleForVerticallyMovingBar(verticallyMovingBarIndex, true);

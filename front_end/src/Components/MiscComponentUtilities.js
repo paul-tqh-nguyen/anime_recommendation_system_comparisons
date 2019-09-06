@@ -7,11 +7,11 @@ export const githubREADMELink = 'https://github.com/paul-tqh-nguyen/react_loadin
 var assert = require('assert');
 
 export function isEven(integerValue) {
-    return (integerValue%2)==0;
+    return (integerValue%2)===0;
 }
 
 export function isOdd(integerValue) {
-    return (integerValue%2)==0;
+    return (integerValue%2)===0;
 }
 
 export function randomChoice(inputArray) {
