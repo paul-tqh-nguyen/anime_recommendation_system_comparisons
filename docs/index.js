@@ -5,6 +5,8 @@
 
 const isUndefined = value => value === void(0);
 
+const shuffle = (array) => array.sort(() => Math.random() - 0.5);
+
 const createSeparatedNumbeString = number => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 const zip = rows => rows[0].map((_, i) => rows.map(row => row[i]));
@@ -636,9 +638,263 @@ This returns a re-render function, but does not actually call the re-render func
     return render;
 };
 
-/********/
-/* Main */
-/********/
+/*********************************/
+/* Neural Architecture Depiction */
+/*********************************/
+
+/* Visualization Utilities */
+
+const innerMargin = 150;
+const textMargin = 8;
+const curvedArrowOffset = 30;
+
+const xCenterPositionForIndex = (encompassingSvg, index, total, overridingInnerMargin=innerMargin) => {
+    const svgWidth = parseFloat(encompassingSvg.style('width'));
+    const innerWidth = svgWidth - 2 * overridingInnerMargin;
+    const delta = innerWidth / (total - 1);
+    const centerX = overridingInnerMargin + index * delta;
+    return centerX;
+};
+
+const generateTextWithBoundingBox = (encompassingSvg, parentGroupClass, textElementClass, boundingBoxClass, textCenterX, yPosition, textString) => {
+    const parentGroup = encompassingSvg
+          .append('g')
+          .classed(parentGroupClass, true);
+    const textElement = parentGroup
+          .append('text')
+	  .attr('y', yPosition)
+          .classed(textElementClass, true)
+          .html(textString);
+    textElement
+	.attr('x', textCenterX - textElement.node().getBBox().width / 2);
+    const boundingBoxElement = parentGroup
+          .append('rect')
+          .classed(boundingBoxClass, true)
+          .attr('x', textElement.attr('x') - textMargin)
+          .attr('y', () => {
+              const textElementBBox = textElement.node().getBBox();
+              return textElementBBox.y - textMargin;
+          })
+          .attr('width', textElement.node().getBBox().width + 2 * textMargin)
+          .attr('height', textElement.node().getBBox().height + 2 * textMargin);
+    textElement.moveToFront();
+    return parentGroup;
+};
+
+const getD3HandleTopXY = (element) => {
+    /* element is a D3 handle */
+    const boundingBox = element.node().getBBox();
+    const x = boundingBox.x + boundingBox.width/2;
+    const y = boundingBox.y;
+    return [x, y];
+};
+
+const getD3HandleBottomXY = (element) => {
+    /* element is a D3 handle */
+    const boundingBox = element.node().getBBox();
+    const x = boundingBox.x + boundingBox.width/2;
+    const y = boundingBox.y + boundingBox.height;
+    return [x, y];
+};
+
+const getD3HandleTopLeftXY = (element) => {
+    /* element is a D3 handle */
+    const boundingBox = element.node().getBBox();
+    const x = boundingBox.x;
+    const y = boundingBox.y;
+    return [x, y];
+};
+
+const getD3HandleBottomLeftXY = (element) => {
+    /* element is a D3 handle */
+    const boundingBox = element.node().getBBox();
+    const x = boundingBox.x;
+    const y = boundingBox.y + boundingBox.height;
+    return [x, y];
+};
+
+const getD3HandleTopRightXY = (element) => {
+    /* element is a D3 handle */
+    const boundingBox = element.node().getBBox();
+    const x = boundingBox.x + boundingBox.width;
+    const y = boundingBox.y;
+    return [x, y];
+};
+
+const getD3HandleBottomRightXY = (element) => {
+    /* element is a D3 handle */
+    const boundingBox = element.node().getBBox();
+    const x = boundingBox.x + boundingBox.width;
+    const y = boundingBox.y + boundingBox.height;
+    return [x, y];
+};
+
+const defineArrowHead = (encompassingSvg) => {
+    const defs = encompassingSvg.append('defs');
+    const marker = defs.append('marker')
+	  .attr('markerWidth', '10')
+	  .attr('markerHeight', '10')
+	  .attr('refX', '5')
+	  .attr('refY', '3')
+	  .attr('orient', 'auto')
+	  .attr('id', 'arrowhead');
+    const polygon = marker.append('polygon')
+	  .attr('points', '0 0, 6 3, 0 6');
+};
+    
+    
+const drawArrow = (encompassingSvg, [x1, y1], [x2, y2]) => {
+    const line = encompassingSvg
+          .append('line')
+	  .attr('marker-end','url(#arrowhead)')
+          .moveToBack()
+	  .attr('x1', x1)
+	  .attr('y1', y1)
+	  .attr('x2', x2)
+	  .attr('y2', y2)
+          .classed('arrow-line', true);
+};
+    
+const drawCurvedArrow = (encompassingSvg, [x1, y1], [x2, y2]) => {
+    const midpointX = (x1+x2)/2;
+    const midpointY = (y1+y2)/2;
+    const dx = (x2 - x1);
+    const dy = (y2 - y1);
+    const normalization = Math.sqrt((dx * dx) + (dy * dy));
+    const offSetX = midpointX + curvedArrowOffset*(dy/normalization);
+    const offSetY = midpointY - curvedArrowOffset*(dx/normalization);
+    const path = `M ${x1}, ${y1} S ${offSetX}, ${offSetY} ${x2}, ${y2}`;
+    const line = encompassingSvg
+          .append('path')
+	  .attr('marker-end','url(#arrowhead)')
+          .moveToBack()
+	  .attr('d', path)
+          .classed('arrow-line', true);
+};
+    
+/* Visualizations */
+    
+const renderNeuralNetworkArchitecture = () => {
+
+    /* Init */
+    
+    const svg = d3.select('#nn-depiction-container svg');
+    const denseLayerCount = 3+Math.floor(Math.random()*2);
+    svg.selectAll('*').remove();
+    svg
+	.attr('width', `80vw`)
+	.attr('height', `${600 + denseLayerCount * 100}px`);
+    defineArrowHead(svg);
+    const svgWidth = parseFloat(svg.style('width'));
+
+    /* Blocks */
+
+    const inputs = [`User ID: ${(Math.random()*12345).toFixed(0)}`, `Anime ID: ${(Math.random()*12345).toFixed(0)}`];
+    
+    // Input IDs
+    const inputIdGroups = inputs.map((word, i) => {
+        const textCenterX = xCenterPositionForIndex(svg, i, inputs.length);
+        const inputIdGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', textCenterX, 100, word);
+        inputIdGroup.classed('input-id-group', true);
+        return inputIdGroup;
+    });
+
+    // Embedding Layer
+    const embeddingGroups = inputIdGroups.map((inputIdGroup, i) => {
+        const centerX = getD3HandleTopXY(inputIdGroup)[0];
+        const embeddingGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', centerX, 200, i === 0 ? 'User Embedding Layer' : 'Anime Embedding Layer');
+        embeddingGroup.classed('embedding-group', true);
+        return embeddingGroup;
+    });
+
+    // Concatenation Layer
+    const concatenationCenterX = svgWidth/2;
+    const concatenationGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', concatenationCenterX, 300, 'Concatenation');
+    concatenationGroup.classed('concatenation-group', true);
+    const concatenationGroupLeftX = embeddingGroups[0].node().getBBox().x;
+    const rightmostAttentionGroupBoundingBox = embeddingGroups[inputs.length-1].node().getBBox();
+    const concatenationGroupRightX = rightmostAttentionGroupBoundingBox.x + rightmostAttentionGroupBoundingBox.width;
+    concatenationGroup.select('rect')
+        .attr('x', concatenationGroupLeftX)
+        .attr('width', concatenationGroupRightX - concatenationGroupLeftX);
+    
+    // Dense Layer
+    const denseGroups = [];
+    for(let i=0; i<denseLayerCount; i++) {
+        const denseCenterX = svgWidth/2;
+        const denseGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', denseCenterX, 400+i*100, i===denseLayerCount-2 ? '&hellip;' : 'Dense Layer');
+        denseGroup.classed('dense-group', true);
+        const denseGroupLeftX = embeddingGroups[0].node().getBBox().x;
+        const rightmostAttentionGroupBoundingBox = embeddingGroups[inputs.length-1].node().getBBox();
+        const denseGroupRightX = rightmostAttentionGroupBoundingBox.x + rightmostAttentionGroupBoundingBox.width;
+        denseGroup.select('rect')
+            .attr('x', denseGroupLeftX)
+            .attr('width', denseGroupRightX - denseGroupLeftX);
+        denseGroups.push(denseGroup);
+    }
+    
+    // Fully Connected Layer
+    const fullyConnectedCenterX = svgWidth/2;
+    const fullyConnectedGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', fullyConnectedCenterX, 400 + denseLayerCount * 100, 'Fully Connected Layer');
+    fullyConnectedGroup.classed('fully-connected-group', true);
+        
+    // Output Layer
+    const outputGroupCenterX = svgWidth/2;
+    const outputGroupLabelText = `User Review Score: ${(Math.random()*10).toFixed(4)}`;
+    const outputGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', outputGroupCenterX, 500 + denseLayerCount * 100, outputGroupLabelText);
+    outputGroup.classed('output-group', true);
+
+    /* Arrows */
+
+    // Inputs to Embedding Layer Arrows
+    zip([inputIdGroups, embeddingGroups]).forEach(([inputIdGroup, embeddingGroup]) => {
+        drawArrow(svg, getD3HandleBottomXY(inputIdGroup), getD3HandleTopXY(embeddingGroup));
+    });
+    
+    // Embedding Layer to Concatenation Layer Arrows
+    embeddingGroups.forEach(embeddingGroup => {
+        const [embeddingGroupX, embeddingGroupY] = getD3HandleBottomXY(embeddingGroup);
+        const concatenationGroupY = getD3HandleTopXY(concatenationGroup)[1];
+        drawArrow(svg, [embeddingGroupX, embeddingGroupY], [embeddingGroupX, concatenationGroupY]);
+    });
+    
+    // Concatenation Layer, Intra Dense Layer, and Fully Connected Layer Arrows
+    const multiArrowGroups = [concatenationGroup].concat(denseGroups).concat([fullyConnectedGroup]);
+    const concatenatedVectorDimension = 5;
+    const multiArrowGroupXPositions = []; 
+    for (let i=0; i<concatenatedVectorDimension; i++) {
+        multiArrowGroupXPositions.push(innerMargin + i*(svgWidth-2*innerMargin)/(concatenatedVectorDimension-1));
+    }
+    multiArrowGroups.forEach((currentGroup, i) => {
+        const currentGroupY = getD3HandleBottomXY(currentGroup)[1];
+        const nextGroup = multiArrowGroups[i+1];
+        if (currentGroup !== fullyConnectedGroup) {
+            if (nextGroup !== fullyConnectedGroup) {
+                const nextGroupY = getD3HandleTopXY(nextGroup)[1];
+                multiArrowGroupXPositions.forEach(x0 => {
+                    multiArrowGroupXPositions.forEach(x1 => {
+                        drawArrow(svg, [x0, currentGroupY], [x1, nextGroupY]);
+                    });
+                });
+            } else {
+                multiArrowGroupXPositions.forEach(x => {
+                    drawArrow(svg, [x, currentGroupY], getD3HandleTopXY(fullyConnectedGroup));
+                });
+            }
+        }
+        
+    });
+
+    // Fully Connected Layer to Output Group Arrows
+    drawArrow(svg, getD3HandleBottomXY(fullyConnectedGroup), getD3HandleTopXY(outputGroup));
+    
+};
+renderNeuralNetworkArchitecture();
+window.addEventListener('resize', renderNeuralNetworkArchitecture);
+
+/*********************/
+/* Result Accordions */
+/*********************/
 
 const generateLabelGeneratorDestructorTriples = (architectureName, rank, summaryData, animeLookupById, additionalStylesString) => {
     let renderContent;

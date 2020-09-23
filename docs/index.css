@@ -272,3 +272,89 @@ svg .user-scatter-plot-point, .anime-scatter-plot-point {
     stroke-width: 0.25;
     fill-opacity: 0.25
 }
+
+/****************************/
+/* Neural Network Depiction */
+/****************************/
+
+.svg-container-center {
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    font-family: sans-serif;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+div#nn-depiction-container {
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+    font-family: sans-serif;
+    backdrop-filter: grayscale(50%) brightness(100%);
+    margin-bottom: 100px;
+    border: 1px solid #5f6566;
+    border-radius: 15px;
+}
+
+#arrowhead {
+}
+
+.arrow-line {
+    fill: none;
+    stroke: black;
+    stroke-width: 2px;
+    stroke-opacity: 1.0;
+}
+
+.text-with-bbox-group {
+}
+
+.text-with-bbox-group-text {
+    fill: black;
+}
+
+.text-with-bbox-group-bounding-box {
+    rx: 10;
+    stroke-width: 1.5;
+    stroke: #000;
+    fill: #fff;
+}
+
+.input-id-group .text-with-bbox-group-bounding-box {
+    rx: 0;
+    stroke-width: 1px;
+}
+
+.input-id-group .text-with-bbox-group-text {
+    fill: #555;
+    font-style: italic;
+}
+
+.embedding-group .text-with-bbox-group-bounding-box {
+    fill: #fff8c4;
+}
+
+.concatenation-group .text-with-bbox-group-bounding-box {
+    fill: #ffc4c4;
+}
+
+.dense-group .text-with-bbox-group-bounding-box {
+    fill: #c4fdff;
+}
+
+.fully-connected-group .text-with-bbox-group-bounding-box {
+    fill: #e4c4ff;
+}
+
+.output-group .text-with-bbox-group-bounding-box {
+    rx: 0;
+    stroke-width: 1px;
+    fill: #fff;
+}
+
+.output-group .text-with-bbox-group-text {
+    fill: #555;
+}
