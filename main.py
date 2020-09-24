@@ -27,12 +27,12 @@ from global_values import GPU_IDS
 def train_default_model_linear() -> None:
     from models import LinearColaborativeFilteringModel
     number_of_epochs = 15
-    batch_size = 256
+    batch_size = 1024
     gradient_clip_val = 1.0
-    learning_rate = 1e-3
-    embedding_size = 100
-    regularization_factor = 1
-    dropout_probability = 0.5
+    learning_rate = 0.0080412280662697
+    embedding_size = 300
+    regularization_factor = 17
+    dropout_probability = 0.005
     LinearColaborativeFilteringModel.train_model(
         gpus=GPU_IDS,
         learning_rate=learning_rate,
@@ -47,15 +47,14 @@ def train_default_model_linear() -> None:
 
 def train_default_model_deep_concat() -> None:
     from models import DeepConcatenationColaborativeFilteringModel
-    # @todo change these defaults
-    number_of_epochs = 13
-    batch_size = 2048
+    number_of_epochs = 15
+    batch_size = 128
     gradient_clip_val = 1.0
-    learning_rate = 0.04051541383517857
-    embedding_size = 230
+    learning_rate = 0.00042004775308303473
+    embedding_size = 435
     dense_layer_count = 2
-    regularization_factor = 2.1908736439954413
-    dropout_probability = 0.3954686174994483
+    regularization_factor = 42
+    dropout_probability = 0.4280301334357563
     DeepConcatenationColaborativeFilteringModel.train_model(
         gpus=GPU_IDS,
         learning_rate=learning_rate,

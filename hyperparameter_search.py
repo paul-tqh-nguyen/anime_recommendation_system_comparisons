@@ -140,7 +140,7 @@ def hyperparameter_search(model_class: type) -> None:
     optimize_kawrgs = dict(
         n_trials=NUMBER_OF_HYPERPARAMETER_SEARCH_TRIALS,
         gc_after_trial=True,
-        # catch=(Exception,), # @todo enable this
+        catch=(Exception,),
     )
     with _training_logging_suppressed():
         preprocess_data()

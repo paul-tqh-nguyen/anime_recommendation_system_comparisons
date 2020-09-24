@@ -865,7 +865,7 @@ const renderNeuralNetworkArchitecture = () => {
     
     // Concatenation Layer, Intra Dense Layer, and Fully Connected Layer Arrows
     const multiArrowGroups = [concatenationGroup].concat(denseGroups).concat([fullyConnectedGroup]);
-    const concatenatedVectorDimension = 5;
+    const concatenatedVectorDimension = 6;
     const multiArrowGroupXPositions = []; 
     for (let i=0; i<concatenatedVectorDimension; i++) {
         multiArrowGroupXPositions.push(innerMargin + i*(svgWidth-2*innerMargin)/(concatenatedVectorDimension-1));
