@@ -783,7 +783,7 @@ const renderNeuralNetworkArchitecture = () => {
     svg.selectAll('*').remove();
     svg
 	.attr('width', `80vw`)
-	.attr('height', `${600 + denseLayerCount * 100}px`);
+	.attr('height', `${700 + denseLayerCount * 100}px`);
     defineArrowHead(svg);
     const svgWidth = parseFloat(svg.style('width'));
 
@@ -837,11 +837,16 @@ const renderNeuralNetworkArchitecture = () => {
     const fullyConnectedCenterX = svgWidth/2;
     const fullyConnectedGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', fullyConnectedCenterX, 400 + denseLayerCount * 100, 'Fully Connected Layer');
     fullyConnectedGroup.classed('fully-connected-group', true);
-        
+    
+    // Sigmoid Layer
+    const sigmoidCenterX = svgWidth/2;
+    const sigmoidGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', sigmoidCenterX, 500 + denseLayerCount * 100, 'Sigmoid &times; 10');
+    sigmoidGroup.classed('sigmoid-group', true);
+    
     // Output Layer
     const outputGroupCenterX = svgWidth/2;
     const outputGroupLabelText = `User Review Score: ${(Math.random()*10).toFixed(4)}`;
-    const outputGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', outputGroupCenterX, 500 + denseLayerCount * 100, outputGroupLabelText);
+    const outputGroup = generateTextWithBoundingBox(svg, 'text-with-bbox-group', 'text-with-bbox-group-text', 'text-with-bbox-group-bounding-box', outputGroupCenterX, 600 + denseLayerCount * 100, outputGroupLabelText);
     outputGroup.classed('output-group', true);
 
     /* Arrows */
@@ -885,8 +890,11 @@ const renderNeuralNetworkArchitecture = () => {
         
     });
 
-    // Fully Connected Layer to Output Group Arrows
-    drawArrow(svg, getD3HandleBottomXY(fullyConnectedGroup), getD3HandleTopXY(outputGroup));
+    // Fully Connected Layer to Sigmoid Group Arrows
+    drawArrow(svg, getD3HandleBottomXY(fullyConnectedGroup), getD3HandleTopXY(sigmoidGroup));
+
+    // Sigmoid Group to Output Group Arrows
+    drawArrow(svg, getD3HandleBottomXY(sigmoidGroup), getD3HandleTopXY(outputGroup));
     
 };
 renderNeuralNetworkArchitecture();
@@ -1086,6 +1094,7 @@ d3.csv("./anime.csv").then(
 ).then((labelGeneratorDestructorTriples) => {
     const resultDiv = document.querySelector('#linear-result');
     const accordion = createLazyAccordion(labelGeneratorDestructorTriples);
+    removeAllChildNodes(resultDiv);
     resultDiv.append(accordion);
 }).catch(err => {
     console.error(err.message);
@@ -1128,6 +1137,7 @@ d3.csv("./anime.csv").then(
 ).then((labelGeneratorDestructorTriples) => {
     const resultDiv = document.querySelector('#deep-result');
     const accordion = createLazyAccordion(labelGeneratorDestructorTriples);
+    removeAllChildNodes(resultDiv);
     resultDiv.append(accordion);
 }).catch(err => {
     console.error(err.message);
