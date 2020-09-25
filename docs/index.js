@@ -850,6 +850,8 @@ const renderNeuralNetworkArchitecture = () => {
     outputGroup.classed('output-group', true);
 
     /* Arrows */
+    
+    const concatenatedVectorDimension = 6;
 
     // Inputs to Embedding Layer Arrows
     zip([inputIdGroups, embeddingGroups]).forEach(([inputIdGroup, embeddingGroup]) => {
@@ -857,15 +859,18 @@ const renderNeuralNetworkArchitecture = () => {
     });
     
     // Embedding Layer to Concatenation Layer Arrows
-    embeddingGroups.forEach(embeddingGroup => {
+    const outArrowsPerEmbeddingGroup = concatenatedVectorDimension / embeddingGroups.length;
+    embeddingGroups.forEach((embeddingGroup, i) => {
         const [embeddingGroupX, embeddingGroupY] = getD3HandleBottomXY(embeddingGroup);
         const concatenationGroupY = getD3HandleTopXY(concatenationGroup)[1];
-        drawArrow(svg, [embeddingGroupX, embeddingGroupY], [embeddingGroupX, concatenationGroupY]);
+        for(let j=i*outArrowsPerEmbeddingGroup; j<(i+1)*outArrowsPerEmbeddingGroup; j++) {
+            const destinationX = innerMargin + j*(svgWidth-2*innerMargin)/(concatenatedVectorDimension-1);
+            drawArrow(svg, [embeddingGroupX, embeddingGroupY], [destinationX, concatenationGroupY]);
+        }
     });
     
     // Concatenation Layer, Intra Dense Layer, and Fully Connected Layer Arrows
     const multiArrowGroups = [concatenationGroup].concat(denseGroups).concat([fullyConnectedGroup]);
-    const concatenatedVectorDimension = 6;
     const multiArrowGroupXPositions = []; 
     for (let i=0; i<concatenatedVectorDimension; i++) {
         multiArrowGroupXPositions.push(innerMargin + i*(svgWidth-2*innerMargin)/(concatenatedVectorDimension-1));
