@@ -1,8 +1,8 @@
 # Recommender System Architecture Comparison on Anime
 
-This is a comparison of anime recommender system using matrix factorization against a neural recommender system.
+This is a comparison of an anime recommender system using matrix factorization against a neural recommender system.
 
-A summary of our findings can be found at https://paul-tqh-nguyen.github.io/anime_recommendation_system_comparisons/.
+A summary of our findings can be found at https://paul-tqh-nguyen.github.io/anime_recommendation_system_comparison/.
 
 ### Tools Used
 
