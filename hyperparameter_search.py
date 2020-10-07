@@ -68,7 +68,7 @@ def _model_to_db_url(model_class: type) -> str:
 
 class HyperParameterSearchObjective:
     def __init__(self, model_class: type, gpu_id_queue: Optional[object]):
-        # gpu_id_queue is an mp.managers.AutoProxy[Queue] and an mp.managers.BaseProxy ; can't declare statically since the classes are generated dyanmically
+        # gpu_id_queue is an mp.managers.AutoProxy[Queue] and an mp.managers.BaseProxy ; can't declare statically since the classes are generated dynamically
         self.model_class = model_class
         self.gpu_id_queue = gpu_id_queue
 
